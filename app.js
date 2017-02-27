@@ -3,6 +3,9 @@ const morgan = require('morgan');
 const fs = require('fs');
 const path = require('path');
 const bodyParser = require('body-parser');
+// Connection URL
+const url = 'mongodb://localhost:27017/codrinkdb';
+
 const app = express();
 const port = process.env.PORT || 3000;
 const user = require('./app/user/userRoutes');
