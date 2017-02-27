@@ -1,13 +1,12 @@
 const express = require('express');
 
 const router = express.Router();
-const user = require('./userController');
-
+const userController = require('./userController');
 router
-  .get('/:id', user.get)
-  .get('/', user.get)
-  .post('/id', user.post)
-  .put('/', user.put)
-  .delete('/id', user.delete);
+  .get('/:id', userController.get)
+  .get('/', userController.get)
+  .post('/id', userController.post)
+  .put('/', userController.put)
+  .delete('/id', userController.delete);
 
 module.exports = router;
