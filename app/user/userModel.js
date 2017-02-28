@@ -6,11 +6,12 @@ const userSchema = new mongoose.Schema({
   username: { type: String, required: true, index: { unique: true } },
   password: { type: String, required: true },
   email: { type: String, trim: true, required: true },
-  adress: String,
+  address: String,
   country: { type: String, trim: true },
   number: { type: String, trim: true },
 
 });
+
 const userModel = mongoose.model('user', userSchema);
 
 module.exports = userModel;

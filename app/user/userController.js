@@ -3,31 +3,29 @@ const UserModel = require('./userModel');
 const user = {
   get: (req, res) => {
     console.log(req.params.id);
-      UserModel.find({req.params.id}, (err, users) => {
-        if (err) throw err;
-        // object of all the users
-        res.json({ data: req.query.id });
-});
-    }
+    UserModel.find({ id: req.params.id }, (err, users) => {
+      if (err) throw err;
+      // object of all the users
+      res.json(users);
+    });
   },
   post: (req, res) => {
     console.log(req.params.id);
     res.json({ data: req.query.id });
   },
   put: (req, res) => {
+    console.log(req.params);
     UserModel({
-      username: 'cyril',
-      password: 'cyril',
-      email: 'charlier.cy@gmail.com',
-      adress: 'test test',
-      country: 'Roubaix',
-      number: '0787931502',
+      username: req.params.username,
+      password: req.params.password,
+      email: req.params.email,
+      address: req.params.address ? req.params.address : '',
+      country: req.params.country ? req.params.country : '',
+      number: req.params.number ? req.params.number : '',
     }).save((err) => {
-      if (err) throw err;
-
-      console.log('User created!');
+      if (err) res.json({ msg: err });
+      else res.json(UserModel);
     });
-    res.json({ data: 'test' });
   },
   delete: (req, res) => {
     console.log(req.params.id);
