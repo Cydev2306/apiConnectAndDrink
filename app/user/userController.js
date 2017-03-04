@@ -2,10 +2,17 @@ const UserModel = require('./userModel');
 
 const user = {
   get: (req, res) => {
-    UserModel.find({ userId: req.params.id }, (err, users) => {
-      if (err) res.status(500).send(err);
-      else res.json(users);
-    });
+    if (req.params.id) {
+      UserModel.findOne({ userId: req.params.id }, (err, users) => {
+        if (err || !users) res.status(400).send(err || { error: 'NotFind' });
+        else res.json(users);
+      });
+    } else {
+      UserModel.find({}, (err, users) => {
+        if (err) res.status(500).send({ error: 'UnknowError' });
+        else res.json(users);
+      }).select('-_id -__v');
+    }
   },
   post: (req, res) => {
     UserModel({
@@ -20,12 +27,12 @@ const user = {
         // erreur param existe déjà
         switch (err.name) {
           case 'MongoError':
-            res.json({ status: 'error', data: 'Ce nom d\'utilisateur est déjà utilisé !' });
+            res.status(400).send({ status: 'error', data: 'Ce nom d\'utilisateur est déjà utilisé !' });
             break;
-          default: res.status(500).send(err);
+          default: res.status(500).send({ error: 'UnknowError' });
             break;
         }
-      } else res.json({ status: 'saved', data: usr.userId });
+      } else res.json({ status: 'saved', idUser: usr.userId });
     });
   },
   put: (req, res) => {
@@ -40,16 +47,16 @@ const user = {
           currentuser.address = req.body.address || currentuser.address;
           currentuser.country = req.body.country || currentuser.country;
           currentuser.number = req.body.number || currentuser.number;
-          currentuser.save((er, data) => {
+          currentuser.save((er) => {
             if (er) {
-              res.status(500).send(er);
+              res.status(500).send({ error: 'UnknowError' });
             }
-            res.send(data);
+            res.send({ status: 'updated', idUser: usr.userId });
           });
         }
       });
     } else {
-      res.json({ status: 'error', data: 'Id manquant ou id est incorrect' });
+      res.status(400).json({ status: 'error', data: 'Id manquant ou id est incorrect' });
     }
   },
   delete: (req, res) => {
@@ -57,15 +64,12 @@ const user = {
       UserModel.findOneAndRemove({
         userId: req.params.id,
       }, (err, usr) => {
-        if (err) { res.status(500).send(err); } else {
-          res.json({
-            status: (usr) ? 'deleted' : 'error',
-            data: (usr) ? usr.userId : 'l\'user n\'existe pas',
-          });
+        if (err) { res.status(500).send({ error: 'UnknowError' }); } else {
+          res.status((usr) ? 200 : 400).send((usr) ? { status: 'deleted', userId: usr.userId } : { status: 'error', data: 'Id manquant ou id est incorrect' });
         }
       });
     } else {
-      res.json({ status: 'error', data: 'Id manquant ou id est incorrect' });
+      res.status(400).send({ status: 'error', data: 'Id manquant ou id est incorrect' });
     }
   },
 };

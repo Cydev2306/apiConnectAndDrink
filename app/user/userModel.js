@@ -7,7 +7,7 @@ autoIncrement.initialize(connection);
 
 const userSchema = new mongoose.Schema({
   username: { type: String, required: true, index: { unique: true } },
-  password: { type: String, required: true },
+  password: { type: String, required: true, select: false },
   email: { type: String, trim: true, required: true },
   address: String,
   country: { type: String, trim: true },
