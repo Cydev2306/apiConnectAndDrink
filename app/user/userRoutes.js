@@ -42,18 +42,6 @@ router
    * @apiGroup User
    *
    * @apiSuccess {Object[]} utilisateurs       Liste des utilisateurs.
-   *
-   * @apiSuccessExample Success-Response:
-   *     HTTP/1.1 200 OK
-   *     {
-   *      "userId": 5,
-   *      "username": "tata",
-   *      "email": "tot@test.fr",
-   *      "address": "1 rue d'exemple",
-   *      "country": "Paris",
-   *      "number": "0102030405"
-   *     }
-   *
    * @apiError UserNotFound The id of the User was not found.
    *
    * @apiErrorExample Error-Response:
