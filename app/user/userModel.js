@@ -1,13 +1,10 @@
 const mongoose = require('mongoose');
 const autoIncrement = require('mongoose-auto-increment');
 
-mongoose.Promise = global.Promise;
-const connection = mongoose.connect('mongodb://localhost:27017/codrinkdb');
-autoIncrement.initialize(connection);
 
 const userSchema = new mongoose.Schema({
   username: { type: String, required: true, index: { unique: true } },
-  password: { type: String, required: true, select: false },
+  password: { type: String, required: true },
   email: { type: String, trim: true, required: true },
   address: String,
   country: { type: String, trim: true },

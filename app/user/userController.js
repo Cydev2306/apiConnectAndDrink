@@ -6,12 +6,12 @@ const user = {
       UserModel.findOne({ userId: req.params.id }, (err, users) => {
         if (err || !users) res.status(400).send(err || { error: 'NotFind' });
         else res.json(users);
-      });
+      }).select('-_id -__v -password');
     } else {
       UserModel.find({}, (err, users) => {
         if (err) res.status(500).send({ error: 'UnknowError' });
         else res.json(users);
-      }).select('-_id -__v');
+      }).select('-_id -__v -password');
     }
   },
   post: (req, res) => {
@@ -39,7 +39,7 @@ const user = {
     if (req.params.id && !isNaN(req.params.id)) {
       UserModel.findOne({ userId: req.params.id }, (err, usr) => {
         if (err && !req.body) {
-          res.status(500).send(err);
+          res.status(500).send({ error: 'UnknowError' });
         } else {
           const currentuser = usr;
           currentuser.password = req.body.password || currentuser.password;
@@ -50,8 +50,7 @@ const user = {
           currentuser.save((er) => {
             if (er) {
               res.status(500).send({ error: 'UnknowError' });
-            }
-            res.send({ status: 'updated', idUser: usr.userId });
+            } else res.send({ status: 'updated', idUser: usr.userId });
           });
         }
       });
