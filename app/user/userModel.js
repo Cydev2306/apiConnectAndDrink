@@ -9,6 +9,7 @@ const userSchema = new mongoose.Schema({
   address: String,
   country: { type: String, trim: true },
   number: { type: String, trim: true },
+  admin: { type: Boolean, default: false },
 });
 
 userSchema.plugin(autoIncrement.plugin, { model: 'user', field: 'userId' });

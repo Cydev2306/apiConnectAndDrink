@@ -1,6 +1,5 @@
 const ItemModel = require('./itemModel');
 
-
 const item = {
   get: (req, res) => {
     if (req.params.id) {
@@ -71,6 +70,5 @@ const item = {
     }
   },
 };
-
 
 module.exports = item;

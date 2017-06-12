@@ -1,12 +1,17 @@
 const express = require('express');
 const morgan = require('morgan');
+const config = require('./config');
+const jwt = require('express-jwt');
+
+
 const fs = require('fs');
 const path = require('path');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const autoIncrement = require('mongoose-auto-increment');
+
 // Connection URL
-const db = mongoose.connect('mongodb://localhost:27017/codrinkdb');
+const db = mongoose.connect(config.database);
 autoIncrement.initialize(db);
 
 const app = express();
@@ -16,22 +21,36 @@ mongoose.Promise = global.Promise;
 // routes
 const user = require('./app/user/userRoutes');
 const item = require('./app/item/itemRoutes');
+const command = require('./app/command/commandRoutes');
+const auth = require('./app/auth/authRoute');
 
 // Middlewares
 const accessLogStream = fs.createWriteStream(path.join(__dirname, 'log/access.log'), { flags: 'a' });
 
 app.use(morgan('combined', { stream: accessLogStream }));
+// log requests
+
+app.use(morgan('dev'));
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use('/user', user);
-app.use('/item', item);
 
-// using arrow syntax
-app.use((req, res, next) => {
-  const err = new Error('Not Found');
-  err.status = 404;
-  next(err);
-});
+app.use('/api/user', user)
+   .use('/api/item', item)
+   .use('/api/command', command)
+   .use('/api/doc', express.static(path.join(__dirname, '/public')))
+   .use('/', auth)
+
+   .use(jwt({ secret: config.secret }).unless({ path: ['/api/doc', '/authenticate'] }))
+   .use((err, req, res, next) => {
+     if (err.name === 'UnauthorizedError') {
+       res.status(err.status).send({ message: err.message });
+       return;
+     }
+     const error = new Error('Not Found');
+     error.status = 404;
+     next(error);
+   });
 
 if (app.get('env') === 'development') {
   app.use((err, req, res) => {
