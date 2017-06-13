@@ -6,12 +6,12 @@ const item = {
       ItemModel.findOne({ itemId: req.params.id }, (err, items) => {
         if (err || !items) res.status(400).send(err || { error: 'NotFind' });
         else res.json(items);
-      }).select('-_id -__v');
+      }).select('-__v');
     } else {
       ItemModel.find({}, (err, users) => {
         if (err) res.status(500).send({ error: 'UnknowError' });
         else res.json(users);
-      }).select('-_id -__v');
+      }).select('-__v');
     }
   },
   post: (req, res) => {

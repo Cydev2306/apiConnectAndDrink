@@ -1,21 +1,20 @@
 const mongoose = require('mongoose');
 const autoIncrement = require('mongoose-auto-increment');
-const item = require('../item/itemModel');
 
-mongoose.connect('mongodb://localhost:27017/codrinkdb');
-// ajouter item en require
-
+const utc = new Date();
+utc.setHours(utc.getHours() + 2);
 const commandSchema = new mongoose.Schema({
   ref: { type: String, index: { unique: true } },
-  username: { type: String, required: true },
-  items: [item],
+  items: [{ type: Number, ref: 'item' }],
   total: { type: Number, required: true },
-  user: { type: Number, required: true },
-  statut: { type: String, required: true },
-  date: { type: Date, default: Date.now },
-  table: { type: String, required: true },
+  user: { type: Number, ref: 'user', required: true },
+  state: { type: String, required: true },
+  date: { type: Date, default: utc },
+  table: { type: String },
 });
 
-commandSchema.plugin(autoIncrement.plugin, { model: 'item', field: 'itemId' });
+commandSchema.plugin(autoIncrement.plugin, { model: 'command', field: 'commandId' });
 
-mongoose.model('command', commandSchema);
+const commandModel = mongoose.model('command', commandSchema);
+
+module.exports = commandModel;

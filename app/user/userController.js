@@ -11,7 +11,7 @@ const user = {
       UserModel.find({}, (err, users) => {
         if (err) res.status(500).send({ error: 'UnknowError' });
         else res.json(users);
-      }).select('-_id -__v -password');
+      }).select('-__v -password');
     }
   },
   post: (req, res) => {

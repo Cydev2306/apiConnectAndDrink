@@ -1,6 +1,7 @@
 const express = require('express');
 
 const router = express.Router();
+// rework
 const user = require('./commandController');
 
 router
@@ -49,7 +50,6 @@ router
    *       "error": "UnknowError"
    *     }
    */
-
   .get('/', user.get)
   /**
    * @api {post} /command Post
@@ -65,7 +65,6 @@ router
    *      "commandId": 0
    *     }
    */
-
   .post('/', user.post)
   /**
    * @api {put} /command/:id Put
