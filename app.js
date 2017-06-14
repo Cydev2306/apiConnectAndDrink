@@ -41,7 +41,7 @@ app.use('/api/user', user)
    .use('/api/doc', express.static(path.join(__dirname, '/public')))
    .use('/', auth)
 
-   .use(jwt({ secret: config.secret }).unless({ path: ['/api/doc', '/authenticate'] }))
+   .use(jwt({ secret: config.secret }).unless({ path: ['/api/doc', '/authenticate', { url: '/api/user', methods: 'POST' }] }))
    .use((err, req, res, next) => {
      if (err.name === 'UnauthorizedError') {
        res.status(err.status).send({ message: err.message });
