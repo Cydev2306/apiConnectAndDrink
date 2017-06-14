@@ -14,6 +14,12 @@ exports.get = (req, res) => {
       else res.json(cmd);
     }).select('-__v');
   }
+  if (req.params.user) {
+    CommmandModel.find({ user: req.params.user }, (err, cmd) => {
+      if (err) res.status(500).send({ error: 'UnknowError' });
+      else res.json(cmd);
+    }).select('-__v');
+  }
 };
 const getItems = myItems =>
   new Promise((resolve, reject) => {
