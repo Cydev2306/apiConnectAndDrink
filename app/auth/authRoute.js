@@ -22,10 +22,10 @@ router.post('/authenticate', (req, res) => {
           expiresIn: 60 * 60 * 24 * 30,
           // expires in 24 hours
         });
-
         // return the information including token as JSON
         res.json({
           success: true,
+          userId: user.userId,
           message: 'Enjoy your token!',
           token,
         });
