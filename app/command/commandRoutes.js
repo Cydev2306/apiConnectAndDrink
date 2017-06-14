@@ -2,7 +2,7 @@ const express = require('express');
 
 const router = express.Router();
 // rework
-const user = require('./commandController');
+const cmd = require('./commandController');
 
 router
 /**
@@ -34,7 +34,7 @@ router
  *       "error": "NotFind"
  *     }
  */
-  .get('/:id', user.get)
+  .get('/:id', cmd.get)
   /**
    * @api {get} /item Get All
    * @apiName GetItems
@@ -50,13 +50,13 @@ router
    *       "error": "UnknowError"
    *     }
    */
-  .get('/', user.get)
+  .get('/', cmd.get)
   /**
    * @api {post} /command Post
    * @apiName Postcommand
    * @apiGroup Command
    *
-   * @apiSuccess {Int} userId Id de l'utilisateur.
+   * @apiSuccess {Int} cmdId Id de l'utilisateur.
    *
    * @apiSuccessExample Success-Response:
    *     HTTP/1.1 200 OK
@@ -65,12 +65,14 @@ router
    *      "commandId": 0
    *     }
    */
-  .post('/', user.post)
+  .post('/', cmd.post)
   /**
-   * @api {put} /command/:id Put
+   * @api {put} /command Put
    * @apiName PutCommand
    * @apiGroup Command
-   *
+   * @apiParam {items} array d'items.
+   * @apiParam {table} numero de la table.
+   * @apiParam {Number} id de la commande.
    * @apiSuccess {Int} commandId Id de la commande.
    *
    * @apiSuccessExample Success-Response:
@@ -89,6 +91,6 @@ router
    *        data: 'Id manquant ou id est incorrect'
    *     }
    */
-  .put('/:id', user.put);
-
+  .put('/', cmd.put)
+  .delete('/:id', cmd.delete);
 module.exports = router;
