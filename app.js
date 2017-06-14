@@ -2,7 +2,7 @@ const express = require('express');
 const morgan = require('morgan');
 const config = require('./config');
 const jwt = require('express-jwt');
-
+const cors = require('cors')
 
 const fs = require('fs');
 const path = require('path');
@@ -26,7 +26,7 @@ const auth = require('./app/auth/authRoute');
 
 // Middlewares
 const accessLogStream = fs.createWriteStream(path.join(__dirname, 'log/access.log'), { flags: 'a' });
-
+app.use(cors());
 app.use(morgan('combined', { stream: accessLogStream }));
 // log requests
 
