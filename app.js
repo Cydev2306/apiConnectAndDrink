@@ -2,7 +2,7 @@ const express = require('express');
 const morgan = require('morgan');
 const config = require('./config');
 const jwt = require('express-jwt');
-const cors = require('cors')
+const cors = require('cors');
 
 const fs = require('fs');
 const path = require('path');
