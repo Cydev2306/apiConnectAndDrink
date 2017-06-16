@@ -5,6 +5,7 @@ const autoIncrement = require('mongoose-auto-increment');
 const userSchema = new mongoose.Schema({
   username: { type: String, required: true, index: { unique: true } },
   password: { type: String, required: true },
+  dateNaiss: { type: String, required: true },
   email: { type: String, trim: true, required: true },
   address: String,
   country: { type: String, trim: true },
